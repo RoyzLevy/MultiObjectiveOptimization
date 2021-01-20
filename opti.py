@@ -22,7 +22,7 @@ class travel_pro(Problem):
         # objectives
         f_time = X[:,0]*self.times[0] + X[:,1]*self.times[1] + X[:,2]*self.times[2] + X[:,3]*self.times[3] + X[:,4]*self.times[4] + X[:,5]*self.times[5]
         f_distance = X[:,0]*self.distances[0] + X[:,1]*self.distances[1] + X[:,2]*self.distances[2] + X[:,3]*self.distances[3] + X[:,4]*self.distances[4] + X[:,5]*self.distances[5]
-        out["F"] = np.column_stack([f_time, f_distance])
+        out["F"] = np.column_stack([f_distance, f_time])
         # out["F"] = f_time
 
         # constraints
@@ -45,7 +45,7 @@ problem = travel_pro(times, distances)
 
 ################### Algorithm chosen:
 
-algorithm = NSGA2(pop_size=10)
+algorithm = NSGA2(pop_size=100)
 # algorithm = NSGA2(pop_size=100,
 #                   sampling=get_sampling("bin_random"),
 #                   crossover=get_crossover("bin_two_point"),
