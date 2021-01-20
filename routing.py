@@ -32,6 +32,12 @@ def main():
 
     C = {(i,j): np.hypot(x_coord[i] - x_coord[j], y_coord[i] - y_coord[j]) for i,j in A} # distances between nodes
 
+    print(C)
+
+    T = {(i,j): rnd.randint(1,10) for i,j in A} # times between nodes
+
+    print(T)
+
     Q = int(argv[1]) # vehicle capacity
     q = {i: rnd.randint(1,Q/2) for i in N} # amount that needs to be delivered to each customer i in N
 
@@ -44,7 +50,9 @@ def main():
 
     ###### Objective
     model.modelSense = GRB.MINIMIZE
-    model.setObjective(quicksum(x[i,j]*C[i,j] for i,j in A))
+    # model.setObjective(quicksum(x[i,j]*C[i,j] for i,j in A))
+    model.setObjectiveN(quicksum(x[i,j]*C[i,j] for i,j in A), 0, weight=0.8)
+    model.setObjectiveN(quicksum(x[i,j]*T[i,j] for i,j in A), 1, weight=0.2)
 
     ###### Constraints
     model.addConstrs(quicksum(x[i,j] for j in V if j!=i) == 1 for i in N) # entering is 1
