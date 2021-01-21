@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from gurobipy import Model, GRB, quicksum
 
+
+# Capacitated Vehicle Routing Problem
 def main():
 
     argv = sys.argv[1:] # number of clients, vehicle capacity, seed
@@ -34,8 +36,8 @@ def main():
 
     T = {(i,j): rnd.randint(1,10) for i,j in A} # times between nodes
 
-    Q = int(argv[1]) # vehicle capacity
-    q = {i: rnd.randint(1,Q/2) for i in N} # amount that needs to be delivered to each customer i in N
+    C = int(argv[1]) # vehicle capacity
+    Q = {i: rnd.randint(1,C/2) for i in N} # amount that needs to be delivered to each customer i in N
 
 
     model = Model('CVRP')
@@ -65,11 +67,11 @@ def main():
     model.addConstrs(quicksum(x[i,j] for i in V if i!=j) == 1 for j in N) # exiting is 1
 
 
-    model.addConstrs((x[i,j] == 1) >> (u[i]+q[j] == u[j]) 
+    model.addConstrs((x[i,j] == 1) >> (u[i]+Q[j] == u[j]) 
                         for i,j in A if i!=0 and j!=0)
 
-    model.addConstrs(u[i] >= q[i] for i in N)
-    model.addConstrs(u[i] <= Q for i in N)
+    model.addConstrs(u[i] >= Q[i] for i in N)
+    model.addConstrs(u[i] <= C for i in N)
 
 
     # stop if the solution is very close to optimal OR after 30 seconds
