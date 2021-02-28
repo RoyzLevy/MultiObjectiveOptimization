@@ -5,6 +5,9 @@ from gurobipy import Model, GRB, quicksum
 
 
 # Capacitated Vehicle Routing Problem
+# this function creates a routing problem and solves it with a multiobjective model
+# it returns the objective value (blended objectives) and has an option to plot
+# the routing graph to the screen (before and after solving the problem)
 def routing(args0,plot_graph=False):
 
     ########################## Prepare data ##########################
@@ -62,7 +65,7 @@ def routing(args0,plot_graph=False):
     # model.setObjective(quicksum(x[i,j]*D[i,j] for i,j in A))
 
     ###### Multi objective (distance & time) - weighted
-    model.setObjectiveN(quicksum(x[i,j]*D[i,j] for i,j in A), 0, weight=0.2)
+    model.setObjectiveN(quicksum(x[i,j]*D[i,j] for i,j in A), 1, weight=0.2)
     model.setObjectiveN(quicksum(x[i,j]*T[i,j] for i,j in A), 1, weight=0.8)
 
     ###### Multi objective (distance & time) - heirarchial approach
@@ -108,13 +111,14 @@ def routing(args0,plot_graph=False):
     return model.objVal
 
 
+# this function creates a statistics graph, using different number of clients and vehicle capacities
 def create_stats_graph():
     # different vehicle capacity
     for capacity in range(250,1001,250):
         clients = []
         objective_avg_values = []
         # different number of clients
-        for num_clients in range(2,14,2):
+        for num_clients in range(2,12,2):
             clients.append(num_clients)
             print("num clients:{} , vehicle capacity:{}".format(num_clients,capacity))
             # average objectives with 4 randomization seeds
@@ -140,8 +144,6 @@ def example_graph():
 def main():
     example_graph()
     # create_stats_graph()
-
-
 
 if __name__ == "__main__":
     main()
