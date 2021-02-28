@@ -1,2 +1,2 @@
 # MultiObjectiveOptimization
-Multiobjective optimization for the TSP problem using the python 'pymoo' package
+Multiobjective optimization for the routing problem using the python gurobi package
